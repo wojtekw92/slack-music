@@ -1,0 +1,22 @@
+{
+  "name": "slack-music",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wojtekw92/slack-music.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wojtekw92/slack-music/issues"
+  },
+  "homepage": "https://github.com/wojtekw92/slack-music#readme",
+  "dependencies": {
+    "@slack/client": "^4.10.0"
+  }
+}
