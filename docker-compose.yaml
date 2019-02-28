@@ -4,6 +4,8 @@ services:
     env_file:
       - envs.env
     build: .
+    ports:
+      - 8000:8000
   db:
     image: mariadb
     restart: always

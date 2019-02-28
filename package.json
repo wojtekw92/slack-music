@@ -19,6 +19,7 @@
   "homepage": "https://github.com/wojtekw92/slack-music#readme",
   "dependencies": {
     "@slack/client": "^4.10.0",
+    "express": "^4.16.4",
     "mysql2": "^1.6.5",
     "sequelize": "^4.42.1",
     "sequelize-cli": "^5.4.0"

@@ -1,5 +1,26 @@
 const { RTMClient, WebClient } = require('@slack/client');
 const models = require('./models');
+const express        = require('express');
+
+const webToker = process.env.WEB_TOKEN;
+
+const app            = express();
+
+const port = 8000;
+
+app.get('/links', async (req, res) => {
+  const links = await models.Links.findAll();
+  let output = "<html><body><table>";
+  links.forEach(el=> {
+    output += `<tr><td>${el.channelName}</td><td>${el.userName}</td><td>${el.createdAt}</td><td><a href="${el.link}">${el.link}</a></td></tr>`;
+  });
+  output += "</table></body></html>"
+  res.send(output);
+});
+
+app.listen(port, () => {
+  console.log('We are live on ' + port);
+});
 
 const token = process.env.SLACK_TOKEN;
 
