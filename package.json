@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prod": "sequelize db:migrate && node index.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,9 @@
   },
   "homepage": "https://github.com/wojtekw92/slack-music#readme",
   "dependencies": {
-    "@slack/client": "^4.10.0"
+    "@slack/client": "^4.10.0",
+    "mysql2": "^1.6.5",
+    "sequelize": "^4.42.1",
+    "sequelize-cli": "^5.4.0"
   }
 }
