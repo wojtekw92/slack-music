@@ -1,21 +1,21 @@
 const { RTMClient, WebClient } = require('@slack/client');
 const models = require('./models');
-const express        = require('express');
-
+const express = require('express');
+const helpers = require('./helpers')
 const webToker = process.env.WEB_TOKEN;
 
-const app            = express();
+const app = express();
 
 const port = 8000;
 
-app.get('/links', async (req, res) => {
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+app.get('/api/links', async (req, res) => {
   const links = await models.Links.findAll();
-  let output = "<html><body><table>";
-  links.forEach(el=> {
-    output += `<tr><td>${el.channelName}</td><td>${el.userName}</td><td>${el.createdAt}</td><td><a href="${el.link}">${el.link}</a></td></tr>`;
-  });
-  output += "</table></body></html>"
-  res.send(output);
+  res.send(links);
 });
 
 app.listen(port, () => {
@@ -25,6 +25,9 @@ app.listen(port, () => {
 const token = process.env.SLACK_TOKEN;
 
 var re = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
+const youtube = /youtu(be|.be)?(\.com)?/gm
+const soundCloud = /soundcloud\.com/gm
+const spotify = /spotify\.com/gm
 
 const web = new WebClient(token);
 const rtm = new RTMClient(token);
@@ -52,16 +55,7 @@ rtm.on('message', async (message) => {
   
   const channel = channels.channels.find(c => (c.id === message.channel));
   const user = users.members.find(u => (u.id === message.user));
-  
-  links.forEach(async element => {
-    await models.Links.create({
-      channelName: channel.name,
-      userName: user.name,
-      link: element
-    });
-  });
-  
-  
+
   if (links) {
     console.log(JSON.stringify({
       user: {
@@ -75,5 +69,24 @@ rtm.on('message', async (message) => {
       links: links
     }));
   }
+
+  links.forEach(async element => {
+    if (!(element.match(youtube) || element.match(spotify) || element.match(soundCloud))) return;
+    const ogData = await helpers.ogsPromise(element);
+    await models.Links.create({
+      channelName: channel.name,
+      userName: user.name,
+      link: element,
+      userId: message.user,
+      channelId: message.channel,
+      ogImage: ogData.ogImage ? ogData.ogImage.url : '',
+      ogTitle: ogData.ogTitle,
+      ogDescription: ogData.ogDescription,
+
+    });
+  });
+  
+  
+
 });
 
