@@ -10,7 +10,7 @@
 <script>
 export default {
   name: 'musiclink',
-  props: ['url', 'title'],
+  props: ['url', 'title', 'layout'],
   data: function () {
     const getIcon = function (url) {
       const ytRegExp = /youtu(be|.be)?(\.com)?/gm
@@ -54,5 +54,8 @@ export default {
   }
   a:hover {
     color: #0d3db1;
+  }
+  .musiclink.list h1 {
+    font-size: 19px;
   }
 </style>

@@ -3,7 +3,7 @@
     <div class="image">
         <img :src="image">
     </div>
-    <description class="desc" :url="url" :title="title" :description="description"></description>
+    <description class="desc" v-bind:class="layout" :layout="layout" :url="url" :title="title" :description="description"></description>
     <div class="author">{{ author }}</div>
     <div class="data"> {{ date }} </div>
 </div>
@@ -13,7 +13,7 @@
 import Description from './Description'
 export default {
   name: 'Music-line',
-  props: ['url', 'title', 'description', 'image', 'date', 'author'],
+  props: ['url', 'title', 'description', 'image', 'date', 'author', 'layout'],
   components: {
     Description
   }
@@ -47,5 +47,9 @@ export default {
   }
   .desc {
     width: 40%;
+  }
+  .line.list .image,
+  .line.list .image img {
+    width: 90px;
   }
 </style>
