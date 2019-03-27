@@ -22,28 +22,30 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.line div {
+  .line {
+    margin-bottom: 10px;
+    /* border-bottom: 1px solid #ccc; */
+  }
+  .line div {
     display: inline-block;
     vertical-align:top
-}
-.image img {
-  max-width: 300px;
-}
-.image {
-  width: 300px;
-}
-.data {
-  padding: 20px;
-  width: 10%;
-}
-.author {
-  padding: 20px;
-  width: 10%;
-}
-.desc {
-  width: 40%;
-}
-.line {
-  margin-bottom: 10px;
-}
+  }
+  .image img {
+    max-width: 200px;
+  }
+  .image {
+    width: 200px;
+  }
+  .data {
+    padding: 20px;
+    width: 10%;
+  }
+  .author {
+    padding: 20px;
+    width: 10%;
+    text-transform: capitalize;
+  }
+  .desc {
+    width: 40%;
+  }
 </style>

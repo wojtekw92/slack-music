@@ -1,11 +1,16 @@
 <template>
-    <div class="musiclink"><i :class="icon"></i><a :href="url" target="_blank">{{ url }}</a></div>
+    <div class="musiclink">
+      <h1>
+        <i :class="icon"></i>
+        <a :href="url" target="_blank">{{ title }}</a>
+      </h1>
+    </div>
 </template>
 
 <script>
 export default {
   name: 'musiclink',
-  props: ['url'],
+  props: ['url', 'title'],
   data: function () {
     const getIcon = function (url) {
       const ytRegExp = /youtu(be|.be)?(\.com)?/gm
@@ -28,16 +33,26 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.fa-youtube {
+  .fa-youtube {
     color: red;
-}
-.fa-soundcloud {
+  }
+  .fa-soundcloud {
     color: orangered;
-}
-.fa-spotify {
+  }
+  .fa-spotify {
     color: green;
-}
-.musiclink {
+  }
+  .musiclink {
     text-align: left;
-}
+  }
+  h1 {
+    margin-top: 0;
+  }
+  a {
+    text-decoration: none;
+    color: #000;
+  }
+  a:hover {
+    color: #0d3db1;
+  }
 </style>
