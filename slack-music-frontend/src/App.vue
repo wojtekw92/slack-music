@@ -39,6 +39,9 @@ export default {
       .then(response => {
         // JSON responses are automatically parsed.
         this.posts = response.data
+        this.posts.forEach(element => {
+          element.createdAt = new Date(element.createdAt).toLocaleString()
+        })
       })
       .catch(e => {
         this.errors.push(e)
