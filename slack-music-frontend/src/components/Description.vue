@@ -1,6 +1,6 @@
 <template>
     <div class="track-description">
-        <musiclink class='link' :url="url" :title="title"></musiclink>
+        <musiclink class='link' v-bind:class="layout" :url="url" :title="title"></musiclink>
         <p class="description">{{ description }}</p>
     </div>
 </template>
@@ -9,7 +9,7 @@
 import Musiclink from './Link'
 export default {
   name: 'track-description',
-  props: ['url', 'title', 'description'],
+  props: ['url', 'title', 'description', 'layout'],
   components: {
     Musiclink
   }
@@ -28,5 +28,11 @@ export default {
   }
   .link {
     margin-left: 10px;
+  }
+  .desc.list .description{
+    display: none;
+  }
+  .desc.list {
+    width: 48%;
   }
 </style>
