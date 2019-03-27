@@ -35,7 +35,7 @@ export default {
     }
   },
   created () {
-    axios.get(`https://stuntapp.com/music/api/links`)
+    axios.get(`/music/api/links`)
       .then(response => {
         // JSON responses are automatically parsed.
         this.posts = response.data
