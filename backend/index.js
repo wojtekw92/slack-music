@@ -1,8 +1,13 @@
-const { RTMClient, WebClient } = require('@slack/client');
+
 const models = require('./models');
 const express = require('express');
 const helpers = require('./helpers')
-const webToker = process.env.WEB_TOKEN;
+const webToken = process.env.WEB_TOKEN;
+
+if (!global.WebSocket) {
+  global.WebSocket = require('ws');
+}
+const wsClient= require('mattermost-redux/client/websocket_client').default
 
 const app = express();
 
@@ -22,7 +27,6 @@ app.listen(port, () => {
   console.log('We are live on ' + port);
 });
 
-const token = process.env.SLACK_TOKEN;
 
 var re = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
 const youtube = /youtu(be|.be)?(\.com)?/gm
@@ -33,60 +37,45 @@ const web = new WebClient(token);
 const rtm = new RTMClient(token);
 rtm.start();
 
-rtm.on('message', async (message) => {
-  if ( (message.subtype && message.subtype === 'bot_message') ||
-    (!message.subtype && message.user === rtm.activeUserId) ) {
-    return;
+wsClient.setEventCallback(function(msg) {
+  if(msg.event === "hello") {
+    console.log(msg);
   }
-
-  if (!message.text) { 
-    return;
-  }
-
-  const links = message.text.match(re);
-  if (!links) {
-    return;
-  }
-
-  let channels = await web.conversations.list({
-    types: "public_channel,private_channel",
-  });
-  let users = await web.users.list();
-  
-  const channel = channels.channels.find(c => (c.id === message.channel));
-  const user = users.members.find(u => (u.id === message.user));
-
-  if (links) {
-    console.log(JSON.stringify({
-      user: {
-        id: message.user,
-        name: user.name,
-      },
-      channel: {
-        id: message.channel,
-        name: channel.name,
-      },
-      links: links
-    }));
-  }
-
-  links.forEach(async element => {
-    if (!(element.match(youtube) || element.match(spotify) || element.match(soundCloud))) return;
-    const ogData = await helpers.ogsPromise(element);
-    await models.Links.create({
-      channelName: channel.name,
-      userName: user.name,
-      link: element,
-      userId: message.user,
-      channelId: message.channel,
-      ogImage: ogData.ogImage ? ogData.ogImage.url : '',
-      ogTitle: ogData.ogTitle,
-      ogDescription: ogData.ogDescription,
-
+  if(msg.event === "posted" ) {
+    const post_data = JSON.parse(msg.data.post);
+    const links = message.text.match(post_data.message);
+    if (!links) {
+      return;
+    }
+    if (links) {
+      console.log(JSON.stringify({
+        user: {
+          id: post_data.user_id,
+          name: msg.data.sender_name,
+        },
+        channel: {
+          id: post_data.channel_id,
+          name: msg.data.channel_name,
+        },
+        timestamp: post_data.create_at,
+        links: links
+      }));
+    }
+    links.forEach(async element => {
+      if (!(element.match(youtube) || element.match(spotify) || element.match(soundCloud))) return;
+      const ogData = await helpers.ogsPromise(element);
+      await models.Links.create({
+        channelName: msg.data.channel_name,
+        userName: msg.data.sender_name,
+        link: element,
+        userId: post_data.user_id,
+        channelId: post_data.channel_id,
+        ogImage: ogData.ogImage ? ogData.ogImage.url : '',
+        ogTitle: ogData.ogTitle,
+        ogDescription: ogData.ogDescription,
+      });
     });
-  });
-  
-  
-
+  }
 });
 
+wsClient.initialize(webToken,  {connectionUrl: 'wss://mattermost.jelocartel.com/api/v4/websocket'});
