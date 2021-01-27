@@ -40,7 +40,7 @@ wsClient.setEventCallback(function(msg) {
   }
   if(msg.event === "posted" ) {
     const post_data = JSON.parse(msg.data.post);
-    const links = post_data.message.text.match(re);
+    const links = post_data.message.match(re);
     if (!links) {
       return;
     }
