@@ -1,8 +1,7 @@
 <template>
     <div class="track-description">
-        <h1 class="title">{{ title }}</h1>
+        <musiclink class='link' v-bind:class="layout" :url="url" :title="title"></musiclink>
         <p class="description">{{ description }}</p>
-        <musiclink :url="url"></musiclink>
     </div>
 </template>
 
@@ -10,7 +9,7 @@
 import Musiclink from './Link'
 export default {
   name: 'track-description',
-  props: ['url', 'title', 'description'],
+  props: ['url', 'title', 'description', 'layout'],
   components: {
     Musiclink
   }
@@ -19,11 +18,21 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.title {
+  .title {
     text-align: left;
     margin: 0;
-}
-.description {
+  }
+  .description {
     text-align: left;
-}
+    margin-left: 10px;
+  }
+  .link {
+    margin-left: 10px;
+  }
+  .desc.list .description{
+    display: none;
+  }
+  .desc.list {
+    width: 48%;
+  }
 </style>

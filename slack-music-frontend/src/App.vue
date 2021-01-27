@@ -1,15 +1,17 @@
 <template>
   <div id="app">
     <img id="logo" src="./assets/logo.png"/>
+    <layout-control @layoutChange='layoutChangeHandler'></layout-control>
     <div v-if="posts && posts.length">
-      <music-line v-for="post in posts"
+      <music-line :class="layout" v-for="post in posts"
         :image="post.ogImage"
         :title="post.ogTitle"
         :date="post.createdAt"
         :url="post.link"
         :author="post.userName"
         :description="post.ogDescription"
-        :key="post.id"></music-line>
+        :key="post.id"
+        :layout="layout"></music-line>
       </div>
   </div>
 </template>
@@ -19,6 +21,7 @@ import Musiclink from './components/Link'
 import Hello from './components/Hello'
 import Description from './components/Description'
 import MusicLine from './components/MusicLine'
+import LayoutControl from './components/LayoutControl'
 import axios from 'axios'
 export default {
   name: 'App',
@@ -26,12 +29,14 @@ export default {
     Hello,
     Musiclink,
     Description,
-    MusicLine
+    MusicLine,
+    LayoutControl
   },
   data () {
     return {
       posts: [],
-      errors: []
+      errors: [],
+      layout: 'tiles'
     }
   },
   created () {
@@ -39,10 +44,18 @@ export default {
       .then(response => {
         // JSON responses are automatically parsed.
         this.posts = response.data
+        this.posts.forEach(element => {
+          element.createdAt = new Date(element.createdAt).toLocaleString()
+        })
       })
       .catch(e => {
         this.errors.push(e)
       })
+  },
+  methods: {
+    layoutChangeHandler(layout) {
+      this.layout = layout;
+    }
   }
 
 }
