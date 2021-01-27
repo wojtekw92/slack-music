@@ -75,4 +75,4 @@ wsClient.setEventCallback(function(msg) {
   }
 });
 
-wsClient.initialize("rex38pn9u3y1td9ekc4pugj5nw",  {connectionUrl: 'wss://mattermost.jelocartel.com/api/v4/websocket'});
+wsClient.initialize(webToken,  {connectionUrl: 'wss://mattermost.jelocartel.com/api/v4/websocket'});
