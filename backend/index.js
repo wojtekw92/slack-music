@@ -33,9 +33,6 @@ const youtube = /youtu(be|.be)?(\.com)?/gm
 const soundCloud = /soundcloud\.com/gm
 const spotify = /spotify\.com/gm
 
-const web = new WebClient(token);
-const rtm = new RTMClient(token);
-rtm.start();
 
 wsClient.setEventCallback(function(msg) {
   if(msg.event === "hello") {
