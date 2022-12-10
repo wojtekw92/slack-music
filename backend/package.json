@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/wojtekw92/slack-music#readme",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "mattermost-redux": "^5.31.2",
     "mysql2": "^1.6.5",
     "open-graph-scraper": "^3.6.1",
